@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Button from "../ui/Button";
 
-// Abstract geometric grid — animates in cell by cell
+// Abstract geometric grid — animates in cell by cell, then idles
 function GeometricGrid({ animate }) {
   const cells = [
     "surface", "transparent", "accent",
@@ -17,6 +17,9 @@ function GeometricGrid({ animate }) {
     accent: "bg-[var(--color-accent)]",
   };
 
+  // Each cell gets a staggered idle animation delay so they pulse in a wave
+  const idleDelays = [0, 400, 800, 1200, 600, 1000, 200, 1400, 400];
+
   return (
     <div
       className={`relative w-full max-w-sm mx-auto md:mx-0 md:ml-auto transition-all duration-700 ${
@@ -24,15 +27,33 @@ function GeometricGrid({ animate }) {
       }`}
       aria-hidden="true"
     >
-      <div className="border border-[var(--color-border)] p-6">
+      <div className="border border-[var(--color-border)] p-6 relative overflow-hidden">
+
+        {/* Scan line that sweeps top-to-bottom on loop */}
+        {animate && (
+          <div
+            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent opacity-60 animate-grid-scan pointer-events-none z-10"
+            style={{ top: 0 }}
+          />
+        )}
+
         <div className="grid grid-cols-3 gap-3">
           {cells.map((type, i) => (
             <div
               key={i}
-              className={`aspect-square ${cellStyle[type]} ${
-                animate ? "animate-grid-cell" : "anim-hidden"
-              }`}
-              style={{ animationDelay: animate ? `${600 + i * 60}ms` : "0ms" }}
+              className={`aspect-square ${cellStyle[type]}`}
+              style={
+                animate
+                  ? {
+                      animationName: `grid-cell-pop, ${type === "accent" ? "grid-cell-pulse" : "grid-cell-glow"}`,
+                      animationDuration: `0.5s, 3s`,
+                      animationTimingFunction: `cubic-bezier(0.22, 1, 0.36, 1), ease-in-out`,
+                      animationFillMode: `both, none`,
+                      animationIterationCount: `1, infinite`,
+                      animationDelay: `${600 + i * 60}ms, ${1100 + idleDelays[i]}ms`,
+                    }
+                  : { opacity: 0 }
+              }
             />
           ))}
         </div>
@@ -60,6 +81,28 @@ function GeometricGrid({ animate }) {
           animate ? "animate-scale-in delay-700" : "anim-hidden"
         }`}
       />
+
+      {/* Corner accent dots that blink */}
+      {animate && (
+        <>
+          <span
+            className="absolute -top-1 -left-1 w-2 h-2 bg-[var(--color-accent)] rounded-full animate-grid-corner-blink"
+            style={{ animationDelay: "0ms" }}
+          />
+          <span
+            className="absolute -top-1 -right-1 w-2 h-2 bg-[var(--color-accent)] rounded-full animate-grid-corner-blink"
+            style={{ animationDelay: "1000ms" }}
+          />
+          <span
+            className="absolute -bottom-1 -left-1 w-2 h-2 bg-[var(--color-accent)] rounded-full animate-grid-corner-blink"
+            style={{ animationDelay: "2000ms" }}
+          />
+          <span
+            className="absolute -bottom-1 -right-1 w-2 h-2 bg-[var(--color-accent)] rounded-full animate-grid-corner-blink"
+            style={{ animationDelay: "3000ms" }}
+          />
+        </>
+      )}
     </div>
   );
 }

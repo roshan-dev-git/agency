@@ -123,6 +123,34 @@ body::before {
   100% { opacity: 1; transform: scale(1); }
 }
 
+@keyframes grid-cell-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes grid-cell-glow {
+  0%, 100% {
+    box-shadow: 0 0 0px 0px rgba(212, 245, 0, 0);
+    border-color: var(--color-border);
+  }
+  50% {
+    box-shadow: 0 0 12px 2px rgba(212, 245, 0, 0.25);
+    border-color: rgba(212, 245, 0, 0.5);
+  }
+}
+
+@keyframes grid-scan {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(400%); opacity: 0; }
+}
+
+@keyframes grid-corner-blink {
+  0%, 90%, 100% { opacity: 0; }
+  45%, 55%      { opacity: 1; }
+}
+
 @keyframes btn-press {
   0%   { transform: scale(1); }
   40%  { transform: scale(0.96); }
@@ -168,6 +196,22 @@ body::before {
   animation: grid-cell-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.animate-grid-cell-idle-pulse {
+  animation: grid-cell-pulse 3s ease-in-out infinite;
+}
+
+.animate-grid-cell-idle-glow {
+  animation: grid-cell-glow 3s ease-in-out infinite;
+}
+
+.animate-grid-scan {
+  animation: grid-scan 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-grid-corner-blink {
+  animation: grid-corner-blink 4s ease-in-out infinite;
+}
+
 .animate-btn-press {
   animation: btn-press 0.3s ease both;
 }
@@ -207,7 +251,11 @@ body::before {
     transform: none;
   }
   .animate-scroll-bounce,
-  .animate-pulse-dot {
+  .animate-pulse-dot,
+  .animate-grid-cell-idle-pulse,
+  .animate-grid-cell-idle-glow,
+  .animate-grid-scan,
+  .animate-grid-corner-blink {
     animation: none;
   }
   .anim-hidden {
