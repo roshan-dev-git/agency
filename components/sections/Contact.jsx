@@ -45,7 +45,7 @@ export default function Contact() {
     <section id="contact" className="py-32">
       <Container>
         <div className="max-w-2xl mx-auto text-center">
-          <SectionTitle label="Let's Talk" title="Start Something Great" align="center" />
+          <SectionTitle label="Let's Talk & CREATE SOMETHING" title="Start Something Great" align="center" />
 
           <Reveal animation="fade-up" delay="delay-200">
             <p className="text-sm text-[var(--color-text-muted)] mt-6 mb-12 leading-relaxed">

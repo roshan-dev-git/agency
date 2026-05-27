@@ -2,8 +2,21 @@
 
 import Reveal from "../ui/Reveal";
 
-const footerLinks = ["Work", "Services", "About", "Contact"];
-const socialLinks = ["Twitter", "LinkedIn", "Instagram"];
+const footerLinks = [
+  { label: "Work", id: "portfolio" },
+  { label: "Services", id: "services" },
+  { label: "Contact", id: "contact" },
+];
+
+const socialLinks = [
+  { label: "Twitter", href: "https://twitter.com" },
+  { label: "LinkedIn", href: "https://linkedin.com" },
+  { label: "Instagram", href: "https://instagram.com" },
+];
+
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
 
 export default function Footer() {
   return (
@@ -13,12 +26,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
           {/* Col 1: Brand */}
           <Reveal animation="fade-up" delay="delay-0">
-            <p
-              className="text-sm font-bold tracking-[0.3em] text-[var(--color-text-primary)] mb-4"
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-sm font-bold tracking-[0.3em] text-[var(--color-text-primary)] mb-4 block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
               style={{ fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace" }}
             >
               FORMA
-            </p>
+            </button>
             <p className="text-sm text-[var(--color-text-muted)] leading-relaxed max-w-xs">
               A boutique creative studio crafting brand experiences that define
               the next generation of business.
@@ -28,15 +42,21 @@ export default function Footer() {
           {/* Col 2: Nav links */}
           <Reveal animation="fade-up" delay="delay-150" className="md:flex md:justify-center">
             <nav aria-label="Footer navigation">
+              <p
+                className="text-xs tracking-widest uppercase text-[var(--color-text-primary)] mb-5"
+                style={{ fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace" }}
+              >
+                Navigate
+              </p>
               <ul className="flex flex-col gap-4">
                 {footerLinks.map((link) => (
-                  <li key={link}>
-                    <a
-                      href={`#${link.toLowerCase()}`}
+                  <li key={link.label}>
+                    <button
+                      onClick={() => scrollTo(link.id)}
                       className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors duration-200 uppercase tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -45,20 +65,30 @@ export default function Footer() {
 
           {/* Col 3: Social */}
           <Reveal animation="fade-up" delay="delay-300" className="md:flex md:justify-end">
-            <ul className="flex flex-col gap-4">
-              {socialLinks.map((social) => (
-                <li key={social}>
-                  <a
-                    href="#"
-                    className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors duration-200 tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
-                    style={{ fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace" }}
-                    aria-label={`Follow us on ${social}`}
-                  >
-                    {social}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div>
+              <p
+                className="text-xs tracking-widest uppercase text-[var(--color-text-primary)] mb-5"
+                style={{ fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace" }}
+              >
+                Follow Us
+              </p>
+              <ul className="flex flex-col gap-4">
+                {socialLinks.map((social) => (
+                  <li key={social.label}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors duration-200 tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+                      style={{ fontFamily: "var(--font-jetbrains), 'JetBrains Mono', monospace" }}
+                      aria-label={`Follow us on ${social.label}`}
+                    >
+                      {social.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </Reveal>
         </div>
 

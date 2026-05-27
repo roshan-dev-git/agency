@@ -2,16 +2,22 @@
 
 import { useInView } from "../hooks/useInView";
 
-export default function ServiceCard({ icon, label, title, description, index = 0 }) {
+export default function ServiceCard({ icon, label, title, description, index = 0, spotlight = false }) {
   const [ref, inView] = useInView(0.1);
   const delay = `delay-${Math.min(index * 100, 400)}`;
+
+  // Spotlight fires once per card, staggered by index (0→1.2s, 1→2s, 2→2.8s, 3→3.6s)
+  // Each card's flash lasts ~0.8s, total sequence ≈ 4.4s → well within 5s
+  const spotlightDelay = `${800 + index * 800}ms`;
 
   return (
     <div
       ref={ref}
       className={`group relative bg-[var(--color-surface)] border border-[var(--color-border)] p-8
         transition-all duration-300 hover:-translate-y-1 cursor-default
-        ${inView ? `animate-fade-up ${delay}` : "anim-hidden"}`}
+        ${inView ? `animate-fade-up ${delay}` : "anim-hidden"}
+        ${spotlight ? "animate-card-spotlight" : ""}`}
+      style={spotlight ? { animationDelay: spotlightDelay } : {}}
     >
       {/* Top: monospace label */}
       <div className="flex justify-end mb-8">
